@@ -1,0 +1,58 @@
+pipeline{
+	agent any
+
+	environment {
+        // Container regitry credentials
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred')
+	}
+	stages {
+        // build the docker image from 
+		stage('Build') {
+			steps {
+				sh 'docker build -t yeasy/simple-web:latest .'
+			}
+		}
+        // login into the container registry
+		stage('Login') {
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+        // push image into the container registry
+		stage('Push') {
+			steps {
+				sh 'docker push yeasy/simple-web:latest'
+			}
+		}
+	}
+
+    // deploy to a kubernetes cluster,we
+    stage('Deploy to K8s')
+		{
+			steps{
+				sshagent(['k8s-jenkins'])
+				{
+					sh 'scp -r -o StrictHostKeyChecking=no simple-web.yaml username@ip-add:/path'
+					
+					script{
+						try{
+							sh 'ssh username@ip-add kubectl apply -f /path/simple-web.yaml --kubeconfig=/path/kube.yaml'
+
+							}catch(error)
+							{
+
+							}
+					}
+				}
+			}
+		}
+	}
+
+    // logout from container registry
+	post {
+		always {
+			sh 'docker logout'
+		}
+	}
+}

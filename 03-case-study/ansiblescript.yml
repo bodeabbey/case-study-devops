@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+  - name: Ensure a job every hour. Creates an entry like "0 * * * echo Hello World > `date +\%Y\%m\%d\%H-\%M-\%S`-test.txt"
+    cron:
+      name: "print hello world to a file with a time stamp"
+      #minute: "0"
+      hour: "0"
+      job: "echo Hello World > `date +\\%Y-\\%M-\\%D-\\%H-\\%M-\\%S`-test.txt"

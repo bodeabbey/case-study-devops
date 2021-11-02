@@ -1,0 +1,12 @@
+1)	Considering the repo is private, first we need to generate a ssh key for the server where the build will take place if one has not been created. The public key of the ssh-key generated is copied and used to create and a new ssh-key in the bitbucket settings. Connection to bitbucket can be tested with “ssh -T git@bitbucket.org”
+2)	From the Dockerfile clone the bitbucket repo by adding an a ARG for an ssh key, then echo the private key from the server into a file that will be created during the build
+3)	The below image a sample command to input into the dockerfile
+
+
+ARG SSH_PRIVATE_KEY
+RUN mkdir /root/.ssh/
+RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
+WORKDIR /code 
+ADD . /code
+RUN --mount=type=ssh git clone git@bitbucket.org:bodeabbey/carbone.git
+

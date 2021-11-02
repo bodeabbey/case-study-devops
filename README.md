@@ -5,8 +5,6 @@ Using bash script, Write script that will automatically provision 3 docker conta
 
 Write a simple ansible script to create a cronjob that prints “hello world” and the time stamp to a file in a server.
 
-Write a terraform script to perform the following functions: 
-  a. provision a default vpc and a fully functional private subnet 
-    b. deploy an ubuntu instance in the subnet
+Write a terraform script to perform the following functions: a. provision a default vpc and a fully functional private subnet b. deploy an ubuntu instance in the subnet
 
 Write a pipeline, on a jenkins or aws codepipeline system, that will build an image out of a given Dockerfile (you can build this project https://github.com/yeasy/simple-web) and will publish that image to running Kubernetes cluster
